@@ -1,7 +1,7 @@
 
 # nodeQt 
 
-	by NickCis (http://twitter.com/NickCis) & Alvarez Tomas (https://github.com/TAlvarez)
+	by NickCis (http://twitter.com/NickCis) & Alvarez Tomas (https://github.com/Talvarez)
 	nodeQt is a Qt implementation for Javascript, in-progress right now, which aims to provide a simple way to create guis.
 
 ## Installation
@@ -39,9 +39,9 @@ Tested with:
 
 ## License
 
-(The MIT License)
+(The Gpl v2 License)
 
-Copyright (c) 2011 NickCis & TAlvarez
+Copyright (c) 2011 NickCis & Talvarez
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
