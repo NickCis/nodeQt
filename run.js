@@ -4,6 +4,10 @@ process.nextTick(function() {
 	var qApp = new nodeQt.Application(function() {
 		console.log('asd');
 	});
+	qApp.CreateWidget();
+	qApp.CreateWidget();
+	qApp.CreateWidget();
+	qApp.CreateWidget();
 //	var win = new nodeQt.Widget();
 //	win.resize(200,200);
 //	var button = new nodeQt.PushButton('Hello World', win);

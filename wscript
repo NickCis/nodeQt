@@ -18,4 +18,4 @@ def build(ctx):
       'src/Widget.cpp',
       'src/Application.cpp'
   ]
-  t.uselib = ['Qt3Support']
+  t.uselib = ['Qt3Support', 'queue']

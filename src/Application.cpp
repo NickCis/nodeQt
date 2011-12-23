@@ -1,13 +1,25 @@
+#include <queue>
+#include <cstdlib>
+#include <iostream>
+
 #include <node/v8.h>
 #include <node/node.h>
 
 #include <QWidget>
+#include <QObject>
+#include <QTimer>
 #include <QApplication>
 
 #include "Application.hpp"
 
 using namespace v8;
-
+//------------------Define El QQueueManager---------------------------
+//ObjQueueManager::ObjQueueManager() : QObject() {}
+/*void ObjQueueManager::QueueManager()
+{
+	std::cout << "hola";
+}*/
+//------------------Define El QQueueManager---------------------------
 
 struct Baton {
     // libuv's request struct.
@@ -28,6 +40,7 @@ struct Baton {
 
     // Custom data you can pass through.
 	Application* Appli;
+	std::queue<int(*)()>* Queue;
 };
 
 Persistent<FunctionTemplate> Application::constructor;
@@ -44,6 +57,7 @@ void Application::Init(Handle<Object> target) {
 	constructor->SetClassName(name);
 
 	// Add all prototype methods, getters and setters here.
+	NODE_SET_PROTOTYPE_METHOD(constructor, "CreateWidget", CreateWidget);
 
 	// This has to be last, otherwise the properties won't show up on the
 	// object in JavaScript.
@@ -64,8 +78,11 @@ Handle<Value> Application::New(const Arguments& args) {
 	Application* obj = new Application();
 
     Local<Function> callback = Local<Function>::Cast(args[0]);
+	obj->Queue = new std::queue<int(*)()>;
     // This creates our work request, including the libuv struct.
     Baton* baton = new Baton();
+	baton->Queue = obj->Queue;
+    baton->request.data = baton;
     baton->request.data = baton;
     baton->callback = Persistent<Function>::New(callback);
     baton->Appli = obj;
@@ -75,6 +92,23 @@ Handle<Value> Application::New(const Arguments& args) {
 	obj->Wrap(args.This());
 	return args.This();
 }
+Handle<Value> Application::CreateWidget(const Arguments& args) {
+	HandleScope scope;
+
+	// Retrieves the pointer to the wrapped object instance.
+	Application* obj = ObjectWrap::Unwrap<Application>(args.This());
+
+	obj->Queue->push((DummyCreate));
+
+	return scope.Close(Boolean::New(true));
+}
+
+int DummyCreate() {
+	QWidget* qwidget = new QWidget();
+	qwidget->resize(200,200);
+	qwidget->show();
+	return 1;
+}
 
 void AsyncWork(uv_work_t* req) {
     Baton* baton = static_cast<Baton*>(req->data);
@@ -83,14 +117,31 @@ void AsyncWork(uv_work_t* req) {
 
 	baton->Appli->app = new QApplication(0, NULL);
 	//The idea is to call gui widgets here. How to do that?, God knows.
-	QWidget* qwidget = new QWidget();
+	// Posible solucion, using a queue with widget creation fuctions. A timmer calls this fuctions
+	/*QTimer *timer = new QTimer();
+	ObjQueueManager qMan;
+	QObject::connect(timer, SIGNAL(timeout()), qMan, SLOT(QueueManager()));
+	timer->start(1000);*/
+/*	QWidget* qwidget = new QWidget();
 	qwidget->resize(200,200);
-	qwidget->show();
-	baton->Appli->app->exec();
+	qwidget->show();*/
+//	baton->Appli->app->exec();
+	while(true) {
+		if (baton->Appli->app->hasPendingEvents())
+			baton->Appli->app->processEvents();
+		while (! baton->Queue->empty() )
+		{
+			(baton->Queue->front())() ;
+			baton->Queue->pop();
+		}
+
+	}
 
     // If the work we do fails, set baton->error_message to the error string
     // and baton->error to true.
 }
+
+
 
 void AsyncAfter(uv_work_t* req) {
     HandleScope scope;
