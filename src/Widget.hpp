@@ -6,6 +6,7 @@
 
 #include <QWidget>
 
+#include "Application.hpp"
 class Widget : public node::ObjectWrap {
 	public:
 		static v8::Persistent<v8::FunctionTemplate> constructor;
@@ -20,6 +21,7 @@ class Widget : public node::ObjectWrap {
 		static v8::Handle<v8::Value> show(const v8::Arguments& args);
 
 		// Your own object variables here
+		Application* appInstance;
 
 };
 
