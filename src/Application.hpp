@@ -16,6 +16,7 @@ class Application : public node::ObjectWrap {
 
 		static v8::Handle<v8::Value> New(const v8::Arguments& args);
 		static v8::Handle<v8::Value> exec(const v8::Arguments& args);
+		static v8::Handle<v8::Value> processEvents(const v8::Arguments& args);
 
 		// Your own object variables here
 		QApplication* app;

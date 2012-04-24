@@ -22,6 +22,7 @@ void Application::Init(Handle<Object> target) {
 
 	// Add all prototype methods, getters and setters here.
 	NODE_SET_PROTOTYPE_METHOD(constructor, "exec", exec);
+	NODE_SET_PROTOTYPE_METHOD(constructor, "processEvents", processEvents);
 
 	// This has to be last, otherwise the properties won't show up on the
 	// object in JavaScript.
@@ -52,6 +53,17 @@ Handle<Value> Application::exec(const Arguments& args) {
 	Application* obj = ObjectWrap::Unwrap<Application>(args.This());
 
 	obj->app->exec();
+
+	return scope.Close(Boolean::New(true));
+}
+
+Handle<Value> Application::processEvents(const Arguments& args) {
+	HandleScope scope;
+
+	// Retrieves the pointer to the wrapped object instance.
+	Application* obj = ObjectWrap::Unwrap<Application>(args.This());
+	if (obj->app->hasPendingEvents())
+		obj->app->processEvents();
 
 	return scope.Close(Boolean::New(true));
 }
