@@ -8,6 +8,7 @@
 #include "Widget.hpp"
 #include "QtAction.hpp"
 
+//TODO: sacar stdio.h
 #include <stdio.h>
 
 class PushButton : public node::ObjectWrap {
@@ -25,6 +26,7 @@ class PushButton : public node::ObjectWrap {
 		static v8::Handle<v8::Value> Label(const v8::Arguments& args);
 		static v8::Handle<v8::Value> resize(const v8::Arguments& args);
 		static v8::Handle<v8::Value> show(const v8::Arguments& args);
+		static v8::Handle<v8::Value> Callback(const v8::Arguments& args);
 
 		// Your own object variables here
 		QString ButtonLabel;

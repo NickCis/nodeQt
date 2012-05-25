@@ -12,6 +12,13 @@ process.nextTick(function() {
 	win.resize(200,200);
 	var button = new nodeQt.PushButton('Hello World', win);
 	button.resize(200,50);
+	button.Callback(true, function() {
+		console.log("hice click y anda");
+		var a = Math.random() *500,
+			b = Math.random() *500;
+		console.log(" %d x %d ", a, b);
+		win.resize(a, b);
+	});
 	win.show();
 	qApp.initialize();
 

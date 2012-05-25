@@ -20,6 +20,7 @@ void PushButton::Init(Handle<Object> target) {
 	NODE_SET_PROTOTYPE_METHOD(constructor, "label", Label);
 	NODE_SET_PROTOTYPE_METHOD(constructor, "resize", resize);
 	NODE_SET_PROTOTYPE_METHOD(constructor, "show", show);
+	NODE_SET_PROTOTYPE_METHOD(constructor, "Callback", Callback);
 
 	// This has to be last, otherwise the properties won't show up on the
 	// object in JavaScript.
@@ -48,10 +49,6 @@ Handle<Value> PushButton::New(const Arguments& args) {
 	obj->qwidget = new QPushButton(texto, parent->qwidget);
 
 
-	ActionSlot* action = new ActionSlot();
-	fprintf(stderr, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
-	fprintf(stderr, " ======== %d ========= \n", action->getValue());
-	QObject::connect(obj->qwidget, SIGNAL(clicked()), action, SLOT(printMe()));
 
 	obj->Wrap(args.This());
 
@@ -85,4 +82,29 @@ Handle<Value> PushButton::show(const Arguments& args) {
 	PushButton* obj = ObjectWrap::Unwrap<PushButton>(args.This());
 	obj->qwidget->show();
 	return scope.Close(Boolean::New(true));
+}
+
+
+Handle<Value> PushButton::Callback(const Arguments& args) {
+    HandleScope scope;
+    // Ensure that we got a callback. Generally, your functions should have
+    // optional callbacks. In this case, you can declare an empty
+    // Local<Function> handle and check for content before calling.
+
+	PushButton* obj = ObjectWrap::Unwrap<PushButton>(args.This());
+
+    if (!args[1]->IsFunction()) {
+        return ThrowException(Exception::TypeError(
+            String::New("Second argument must be a callback function")));
+    }
+    // There's no ToFunction(), use a Cast instead.
+    Local<Function> callback = Local<Function>::Cast(args[1]);
+    Persistent<Function> Pcallback = Persistent<Function>::New(callback);
+
+
+	ActionSlot* action = new ActionSlot();
+	action->call = Pcallback;
+	QObject::connect(obj->qwidget, SIGNAL(clicked()), action, SLOT(calleame()));
+
+    return Undefined();
 }
