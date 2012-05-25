@@ -1,8 +1,3 @@
-#include <node/v8.h>
-#include <node/node.h>
-
-#include <QWidget>
-
 #include "Widget.hpp"
 
 using namespace v8;

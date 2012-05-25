@@ -1,5 +1,7 @@
 //var nodeQt = require('./build/Release/nodeQt');
+console.log('aaa');
 var nodeQt = require('./lib/nodeQt');
+console.log('aaa');
 
 setInterval(function() {
 	console.log('pepe');

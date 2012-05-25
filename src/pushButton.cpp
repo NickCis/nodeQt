@@ -1,10 +1,4 @@
-#include <node/v8.h>
-#include <node/node.h>
-
-#include <QPushButton>
-
 #include "pushButton.hpp"
-#include "Widget.hpp"
 
 using namespace v8;
 
@@ -52,6 +46,12 @@ Handle<Value> PushButton::New(const Arguments& args) {
 	PushButton* obj = new PushButton(texto);
 
 	obj->qwidget = new QPushButton(texto, parent->qwidget);
+
+
+	ActionSlot* action = new ActionSlot();
+	fprintf(stderr, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+	fprintf(stderr, " ======== %d ========= \n", action->getValue());
+	QObject::connect(obj->qwidget, SIGNAL(clicked()), action, SLOT(printMe()));
 
 	obj->Wrap(args.This());
 

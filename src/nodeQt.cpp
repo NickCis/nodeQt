@@ -1,9 +1,3 @@
-#include <node/v8.h>
-#include <node/node.h>
-
-#include "Widget.hpp"
-#include "pushButton.hpp"
-#include "Application.hpp"
 #include "nodeQt.hpp"
 
 using namespace v8;

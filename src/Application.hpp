@@ -1,8 +1,8 @@
 #ifndef APPLICATION_HPP
 #define APPLICATION_HPP
 
-#include <v8.h>
-#include <node.h>
+#include <node/v8.h>
+#include <node/node.h>
 
 #include <QApplication>
 

@@ -1,8 +1,3 @@
-#include <node/v8.h>
-#include <node/node.h>
-
-#include <QApplication>
-
 #include "Application.hpp"
 
 using namespace v8;

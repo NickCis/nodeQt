@@ -1,12 +1,14 @@
 #ifndef PUSHBUTTON_HPP
 #define PUSHBUTTON_HPP
 
-#include <v8.h>
-#include <node.h>
-
+#include <node/v8.h>
+#include <node/node.h>
 #include <QPushButton>
 
 #include "Widget.hpp"
+#include "QtAction.hpp"
+
+#include <stdio.h>
 
 class PushButton : public node::ObjectWrap {
 	public:

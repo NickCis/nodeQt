@@ -16,6 +16,7 @@ def build(ctx):
       'src/nodeQt.cpp',
       'src/pushButton.cpp',
       'src/Widget.cpp',
-      'src/Application.cpp'
+      'src/Application.cpp',
+      'src/QtAction.cpp'
   ]
   t.uselib = ['Qt3Support']
