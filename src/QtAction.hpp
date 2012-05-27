@@ -1,11 +1,9 @@
 #ifndef __Q_ACTION_SLOT__
 #define __Q_ACTION_SLOT__
-//TODO: sacar stdio.h
-#include <stdio.h>
-#include <QObject>
 
 #include <node/v8.h>
 #include <node/node.h>
+#include <QObject>
 
 class ActionSlot : public QObject
 {
@@ -13,15 +11,17 @@ class ActionSlot : public QObject
 
 	public:
 		ActionSlot();
-		int getValue();
-		v8::Handle<v8::Function> call;
+		~ActionSlot();
+
+		void setCallback(v8::Handle<v8::Function> callback);
+		v8::Persistent<v8::Function> getCallback();
+		void clearCallback();
 
 	public slots:
-		void printMe();
-		void calleame();
+		void callCallback();
 
 	private:
-		int m_value;
+		v8::Persistent<v8::Function> callback;
 };
 
 #endif

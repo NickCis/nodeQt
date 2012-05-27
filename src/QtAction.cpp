@@ -2,27 +2,40 @@
 
 using namespace v8;
 
-ActionSlot::ActionSlot(): QObject() {m_value = 0;};
+ActionSlot::ActionSlot(): QObject() {};
 
-void ActionSlot::printMe()
+ActionSlot::~ActionSlot()
 {
-	fprintf(stderr, "Imprimir =========== %d\n", this->m_value);
+	this->clearCallback();
 }
 
-int ActionSlot::getValue() {
-	return this->m_value;
+void ActionSlot::clearCallback()
+{
+	if (this->callback.IsEmpty()) {
+		this->callback.Dispose();
+		this->callback.Clear();
+	}
+
+}
+void ActionSlot::setCallback(Handle<Function> callback)
+{
+	this->clearCallback();
+	this->callback = Persistent<Function>::New(callback);
+	return;
 }
 
-void ActionSlot::calleame()
+Persistent<Function> ActionSlot::getCallback()
 {
-	fprintf(stderr, "1CBB =========== \n");
+	return this->callback;
+}
+
+void ActionSlot::callCallback()
+{
+	HandleScope scope;
 	const unsigned argc = 2;
-	fprintf(stderr, "2CBB =========== \n");
 	Local<Value> argv[argc] = {
 		Local<Value>::New(Null()),
 		Local<Value>::New(Integer::New(42))
 	};
-	fprintf(stderr, "3CBB =========== \n");
-	this->call->Call(Context::GetCurrent()->Global(), argc, argv);
-	fprintf(stderr, "4CBB =========== \n");
+	this->callback->Call(Context::GetCurrent()->Global(), argc, argv);
 }

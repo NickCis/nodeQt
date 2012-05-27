@@ -1,15 +1,15 @@
 /****************************************************************************
-** Meta object code from reading C++ file 'QtAction.hpp'
+** Meta object code from reading C++ file 'QtWindow.hpp'
 **
-** Created: Sat May 26 22:14:30 2012
+** Created: Sat May 26 23:22:17 2012
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "QtAction.hpp"
+#include "QtWindow.hpp"
 #if !defined(Q_MOC_OUTPUT_REVISION)
-#error "The header file 'QtAction.hpp' doesn't include <QObject>."
+#error "The header file 'QtWindow.hpp' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 63
 #error "This file was generated using the moc from 4.8.0. It"
 #error "cannot be used with the include files from this version of Qt."
@@ -17,7 +17,7 @@
 #endif
 
 QT_BEGIN_MOC_NAMESPACE
-static const uint qt_meta_data_ActionSlot[] = {
+static const uint qt_meta_data_QWindow[] = {
 
  // content:
        6,       // revision
@@ -28,60 +28,60 @@ static const uint qt_meta_data_ActionSlot[] = {
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
 
- // slots: signature, parameters, type, tag, flags
-      12,   11,   11,   11, 0x0a,
+ // signals: signature, parameters, type, tag, flags
+       9,    8,    8,    8, 0x05,
 
        0        // eod
 };
 
-static const char qt_meta_stringdata_ActionSlot[] = {
-    "ActionSlot\0\0callCallback()\0"
+static const char qt_meta_stringdata_QWindow[] = {
+    "QWindow\0\0closed()\0"
 };
 
-void ActionSlot::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+void QWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         Q_ASSERT(staticMetaObject.cast(_o));
-        ActionSlot *_t = static_cast<ActionSlot *>(_o);
+        QWindow *_t = static_cast<QWindow *>(_o);
         switch (_id) {
-        case 0: _t->callCallback(); break;
+        case 0: _t->closed(); break;
         default: ;
         }
     }
     Q_UNUSED(_a);
 }
 
-const QMetaObjectExtraData ActionSlot::staticMetaObjectExtraData = {
+const QMetaObjectExtraData QWindow::staticMetaObjectExtraData = {
     0,  qt_static_metacall 
 };
 
-const QMetaObject ActionSlot::staticMetaObject = {
-    { &QObject::staticMetaObject, qt_meta_stringdata_ActionSlot,
-      qt_meta_data_ActionSlot, &staticMetaObjectExtraData }
+const QMetaObject QWindow::staticMetaObject = {
+    { &QWidget::staticMetaObject, qt_meta_stringdata_QWindow,
+      qt_meta_data_QWindow, &staticMetaObjectExtraData }
 };
 
 #ifdef Q_NO_DATA_RELOCATION
-const QMetaObject &ActionSlot::getStaticMetaObject() { return staticMetaObject; }
+const QMetaObject &QWindow::getStaticMetaObject() { return staticMetaObject; }
 #endif //Q_NO_DATA_RELOCATION
 
-const QMetaObject *ActionSlot::metaObject() const
+const QMetaObject *QWindow::metaObject() const
 {
     return QObject::d_ptr->metaObject ? QObject::d_ptr->metaObject : &staticMetaObject;
 }
 
-void *ActionSlot::qt_metacast(const char *_clname)
+void *QWindow::qt_metacast(const char *_clname)
 {
     if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_ActionSlot))
-        return static_cast<void*>(const_cast< ActionSlot*>(this));
-    return QObject::qt_metacast(_clname);
+    if (!strcmp(_clname, qt_meta_stringdata_QWindow))
+        return static_cast<void*>(const_cast< QWindow*>(this));
+    return QWidget::qt_metacast(_clname);
 }
 
-int ActionSlot::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+int QWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QObject::qt_metacall(_c, _id, _a);
+    _id = QWidget::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
@@ -90,5 +90,11 @@ int ActionSlot::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         _id -= 1;
     }
     return _id;
+}
+
+// SIGNAL 0
+void QWindow::closed()
+{
+    QMetaObject::activate(this, &staticMetaObject, 0, 0);
 }
 QT_END_MOC_NAMESPACE

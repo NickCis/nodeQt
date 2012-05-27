@@ -31,6 +31,7 @@ class PushButton : public node::ObjectWrap {
 		// Your own object variables here
 		QString ButtonLabel;
 		QPushButton* qwidget;
+		ActionSlot *qaCallback;
 		//Persistent<Function> onClick;
 
 };

@@ -86,25 +86,23 @@ Handle<Value> PushButton::show(const Arguments& args) {
 
 
 Handle<Value> PushButton::Callback(const Arguments& args) {
-    HandleScope scope;
-    // Ensure that we got a callback. Generally, your functions should have
-    // optional callbacks. In this case, you can declare an empty
-    // Local<Function> handle and check for content before calling.
+	HandleScope scope;
+	// Ensure that we got a callback. Generally, your functions should have
+	// optional callbacks. In this case, you can declare an empty
+	// Local<Function> handle and check for content before calling.
 
 	PushButton* obj = ObjectWrap::Unwrap<PushButton>(args.This());
 
-    if (!args[1]->IsFunction()) {
-        return ThrowException(Exception::TypeError(
-            String::New("Second argument must be a callback function")));
-    }
-    // There's no ToFunction(), use a Cast instead.
-    Local<Function> callback = Local<Function>::Cast(args[1]);
-    Persistent<Function> Pcallback = Persistent<Function>::New(callback);
+	if (!args[1]->IsFunction()) {
+		return ThrowException(Exception::TypeError(
+					String::New("Second argument must be a callback function")));
+	}
+	// There's no ToFunction(), use a Cast instead.
+	Local<Function> callback = Local<Function>::Cast(args[1]);
 
+	obj->qaCallback = new ActionSlot();
+	obj->qaCallback->setCallback(callback);
+	QObject::connect(obj->qwidget, SIGNAL(clicked()), obj->qaCallback, SLOT(callCallback()));
 
-	ActionSlot* action = new ActionSlot();
-	action->call = Pcallback;
-	QObject::connect(obj->qwidget, SIGNAL(clicked()), action, SLOT(calleame()));
-
-    return Undefined();
+    return scope.Close(Undefined());
 }
