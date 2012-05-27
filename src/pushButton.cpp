@@ -28,7 +28,7 @@ PushButton::PushButton(QString label): ButtonLabel(label)
 
 PushButton::~PushButton()
 {
-	fprintf(stderr, "I'm PushButton destroying, is it correct?");
+	fprintf(stderr, "I'm PushButton destroying, is it correct?\n");
 	if (this->asClicked)
 		delete this->asClicked;
 };

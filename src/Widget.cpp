@@ -43,7 +43,7 @@ Widget::Widget(): ObjectWrap()
 
 Widget::~Widget()
 {
-	fprintf(stderr, "I'm widget destroying, is it correct?");
+	fprintf(stderr, "I'm widget destroying, is it correct?\n");
 	if (this->asDestroyed)
 		delete this->asDestroyed;
 	if(this->qwidget)
