@@ -7,6 +7,8 @@
 #include <QWidget>
 #include "QtAction.hpp"
 
+#include <stdio.h>
+
 class Widget : public node::ObjectWrap {
 	public:
 		static v8::Persistent<v8::FunctionTemplate> constructor;

@@ -2,33 +2,49 @@
 
 using namespace v8;
 
-
-Persistent<FunctionTemplate> PushButton::constructor;
-
-void PushButton::Init(Handle<Object> target) {
+void PushButton::Init(Handle<Object> target)
+{
 	HandleScope scope;
 
 	Local<FunctionTemplate> tpl = FunctionTemplate::New(New);
-	Local<String> name = String::NewSymbol("PushButton");
+	Local<String> name = GetName();
 
-	constructor = Persistent<FunctionTemplate>::New(tpl);
+	tpl->SetClassName(name);
 	// ObjectWrap uses the first internal field to store the wrapped pointer.
-	constructor->InstanceTemplate()->SetInternalFieldCount(1);
-	constructor->SetClassName(name);
+	tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
-	// Add all prototype methods, getters and setters here.
-	NODE_SET_PROTOTYPE_METHOD(constructor, "label", Label);
-	NODE_SET_PROTOTYPE_METHOD(constructor, "resize", resize);
-	NODE_SET_PROTOTYPE_METHOD(constructor, "show", show);
-	NODE_SET_PROTOTYPE_METHOD(constructor, "Callback", Callback);
+	RegisterMethods(tpl);
 
 	// This has to be last, otherwise the properties won't show up on the
 	// object in JavaScript.
+	constructor = Persistent<FunctionTemplate>::New(tpl);
 	target->Set(name, constructor->GetFunction());
 }
 
-PushButton::PushButton(QString label): ObjectWrap(), ButtonLabel(label) {}
+PushButton::PushButton(QString label): ButtonLabel(label)
+{
+	this->asClicked = NULL;
+}
 
+PushButton::~PushButton()
+{
+	fprintf(stderr, "I'm PushButton destroying, is it correct?");
+	if (this->asClicked)
+		delete this->asClicked;
+};
+
+void PushButton::RegisterMethods(Local<FunctionTemplate> tpl) {
+	// Add all prototype methods, getters and setters here.
+	Widget::RegisterMethods(tpl);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "Label", Label);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "ConnectClicked", ConnectClicked);
+}
+
+Local<String> PushButton::GetName()
+{
+	Local<String> name = String::NewSymbol("PushButton");
+	return name;
+}
 
 Handle<Value> PushButton::New(const Arguments& args) {
 	HandleScope scope;
@@ -48,8 +64,6 @@ Handle<Value> PushButton::New(const Arguments& args) {
 
 	obj->qwidget = new QPushButton(texto, parent->qwidget);
 
-
-
 	obj->Wrap(args.This());
 
 	return args.This();
@@ -63,29 +77,7 @@ Handle<Value> PushButton::Label(const Arguments& args) {
 	return scope.Close(String::New(obj->ButtonLabel));
 }
 
-Handle<Value> PushButton::resize(const Arguments& args) {
-	HandleScope scope;
-	if (args.Length() != 2) {
-		return ThrowException(Exception::TypeError(
-			String::New("First two arguments must be numbers X Y")));
-	}
-
-	// Retrieves the pointer to the wrapped object instance.
-	PushButton* obj = ObjectWrap::Unwrap<PushButton>(args.This());
-	obj->qwidget->resize(args[0]->ToInteger()->Value(), args[1]->ToInteger()->Value());
-	return scope.Close(Boolean::New(true));
-}
-
-Handle<Value> PushButton::show(const Arguments& args) {
-	HandleScope scope;
-	// Retrieves the pointer to the wrapped object instance.
-	PushButton* obj = ObjectWrap::Unwrap<PushButton>(args.This());
-	obj->qwidget->show();
-	return scope.Close(Boolean::New(true));
-}
-
-
-Handle<Value> PushButton::Callback(const Arguments& args) {
+Handle<Value> PushButton::ConnectClicked(const Arguments& args) {
 	HandleScope scope;
 	// Ensure that we got a callback. Generally, your functions should have
 	// optional callbacks. In this case, you can declare an empty
@@ -93,16 +85,15 @@ Handle<Value> PushButton::Callback(const Arguments& args) {
 
 	PushButton* obj = ObjectWrap::Unwrap<PushButton>(args.This());
 
-	if (!args[1]->IsFunction()) {
+	if (!args[0]->IsFunction()) {
 		return ThrowException(Exception::TypeError(
 					String::New("Second argument must be a callback function")));
 	}
 	// There's no ToFunction(), use a Cast instead.
-	Local<Function> callback = Local<Function>::Cast(args[1]);
-
-	obj->qaCallback = new ActionSlot();
-	obj->qaCallback->setCallback(callback);
-	QObject::connect(obj->qwidget, SIGNAL(clicked()), obj->qaCallback, SLOT(callCallback()));
-
+	Local<Function> callback = Local<Function>::Cast(args[0]);
+	if (!obj->asClicked)
+		obj->asClicked = new ActionSlot();
+	obj->asClicked->setCallback(callback);
+	QObject::connect(obj->qwidget, SIGNAL(clicked()), obj->asClicked, SLOT(callCallback()));
     return scope.Close(Undefined());
 }

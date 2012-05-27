@@ -43,6 +43,7 @@ Widget::Widget(): ObjectWrap()
 
 Widget::~Widget()
 {
+	fprintf(stderr, "I'm widget destroying, is it correct?");
 	if (this->asDestroyed)
 		delete this->asDestroyed;
 	if(this->qwidget)
@@ -71,7 +72,6 @@ Handle<Value> Widget::resize(const Arguments& args) {
 	// Retrieves the pointer to the wrapped object instance.
 	Widget* obj = ObjectWrap::Unwrap<Widget>(args.This());
 	obj->qwidget->resize(args[0]->ToInteger()->Value(), args[1]->ToInteger()->Value());
-
 	return scope.Close(Boolean::New(true));
 }
 
